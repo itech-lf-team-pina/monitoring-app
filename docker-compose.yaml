@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  python:
+    image: python:3.11
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/var/app
+    command: python simple_server.py
+    working_dir: /var/app
+
+  db:
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: "app"
+      MYSQL_USER: "app"
+      MYSQL_PASSWORD: "app"
+    image: mariadb:10.9
+    ports:
+      - 3306:3306
+    volumes:
+      - database:/var/lib/mysql
+
+volumes:
+  database:
+    name: "database"
