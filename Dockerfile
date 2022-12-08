@@ -6,3 +6,5 @@ WORKDIR /app
 # our installed requirements rather than reinstall them on every build
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
+
+USER 1000:1000
