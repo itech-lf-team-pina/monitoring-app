@@ -2,12 +2,12 @@ version: '3.9'
 
 services:
   python:
-    image: python:3.11
+    build: .
     ports:
-      - 8000:8000
+      - "5000:5000"
     volumes:
       - ./:/app
-    command: flask --app simple_server run --host=0.0.0.0
+    command: python -m flask run --host=0.0.0.0
 
   db:
     environment:
@@ -17,10 +17,10 @@ services:
       MYSQL_PASSWORD: "app"
     image: mariadb:10.9
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
       - database:/var/lib/mysql
 
 volumes:
   database:
-    name: "database"
+    name: "monitoring-app-database"
