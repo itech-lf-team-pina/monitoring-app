@@ -6,9 +6,8 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./:/var/app
-    command: python -m flask run
-    working_dir: /var/app
+      - ./:/app
+    command: flask --app simple_server run --host=0.0.0.0
 
   db:
     environment:
