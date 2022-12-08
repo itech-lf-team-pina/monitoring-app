@@ -7,7 +7,7 @@ services:
       - "5000:5000"
     volumes:
       - ./:/app
-    command: python -m flask run --host=0.0.0.0
+    command: python app/main.py
 
   db:
     environment:
