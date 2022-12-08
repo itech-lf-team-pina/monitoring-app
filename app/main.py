@@ -2,7 +2,7 @@ from webserver.server import create_app
 
 
 class Main:
-    webserver = create_app().run()
+    webserver = create_app().run('0.0.0.0', 5000)
 
 
 def main():
