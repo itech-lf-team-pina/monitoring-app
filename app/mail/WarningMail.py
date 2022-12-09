@@ -7,11 +7,10 @@ class WarningMail:
     def send_mail(log, email):
         config = configparser.ConfigParser()
         config.read('config.ini')
-        print(config.sections())
         port = 587  # For starttls
         smtp_server = config['sendermail']['smtp']
         sender_email = config['sendermail']['email']
-        password = config['sendermail']['passwd']
+        password = config['sendermail']['password']
         message = open('mail.txt', 'r').read().replace('$LOG', log)
         message = '\n' + message
         server = smtplib.SMTP(host=smtp_server, port=port)
