@@ -6,7 +6,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./:/app
+      - ./:/project
     command: python app/main.py
 
   db:
