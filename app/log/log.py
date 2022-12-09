@@ -1,10 +1,18 @@
+import time
+
 class Log:
-    def write(self, log_entry):
-        file = open('logs/log.log', 'a')
-        file.write(log_entry + '\n')
+    logfile = 'logs/application.log'
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+
+    @staticmethod
+    def write(log_entry):
+        file = open(Log.logfile, 'a')
+        file.write(f'[{Log.current_time}] ' + log_entry + '\n')
         return file
 
-    def read(self):
-        file = open('logs/log.log', 'r')
+    @staticmethod
+    def read():
+        file = open(Log.logfile, 'r')
 
         return file.read()
