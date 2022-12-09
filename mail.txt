@@ -1,0 +1,2 @@
+Dear User,
+The following log record caused the alert condition to trigger: $LOG

@@ -1,0 +1,7 @@
+[receivemail]
+email = example2@example.com
+
+[sendermail]
+smtp = smtp.example.de
+email = example@example.com
+password = YourStrongPassword
