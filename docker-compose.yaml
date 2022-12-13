@@ -8,6 +8,8 @@ services:
     volumes:
       - ./:/project
     command: python app/main.py
+    environment:
+      PORT: '5050'
 
   db:
     environment:
