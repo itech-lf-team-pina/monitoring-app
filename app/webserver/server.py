@@ -3,9 +3,10 @@ import os
 from flask import Flask
 from app.log.log import Log
 
+
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app: Flask = Flask(__name__, instance_relative_config=True)
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
