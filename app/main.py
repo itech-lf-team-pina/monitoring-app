@@ -17,8 +17,6 @@ class Main:
     hardware_log = threading.Thread(target=lambda: HardwareMonitor().write_periodic_logs(),
                                     name='HardwareLogWriter').start()
 
-    # log.write('Test')
-    # print(log.read())
 
 
 if __name__ == "__main__":
