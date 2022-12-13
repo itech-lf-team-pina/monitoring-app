@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Python application
+name: Prod Deploy in exe
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -30,13 +30,14 @@ jobs:
     - name: Install Dependencies
       run: |
         pip install -r requirements.txt
-    - name: Build .exe
-      uses: Nuitka/Nuitka-Action@v0.4
+    - name: Package Application
+      uses: JackMcKew/pyinstaller-action-windows@main
       with:
-        script-name: app/main.py
+        path: /
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: exe
-        path: build/main.exe
+        name: monitoring
+        path: /dist/windows
 
