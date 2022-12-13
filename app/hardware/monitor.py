@@ -3,7 +3,6 @@ import time
 import psutil
 from app.log.log import Log
 
-
 class HardwareMonitor:
     def write_periodic_logs(self):
         Log.write('CPU count: ' + str(self.get_cpu_count()))
