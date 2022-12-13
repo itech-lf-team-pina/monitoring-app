@@ -8,6 +8,7 @@ class HardwareMonitor:
     def write_periodic_logs(self):
         Log.write('CPU count: ' + str(self.get_cpu_count()))
         while True:
+            Log.write('---------------------------------------')
             Log.write('RAM total: ' + str(self.bytes2human(self.get_ram()[0])))
             Log.write('RAM available: ' + str(self.bytes2human(self.get_ram()[1])))
             Log.write('RAM used (percent): ' + str(self.get_ram()[2]) + '%')
@@ -15,6 +16,12 @@ class HardwareMonitor:
             Log.write('Free disk space: ' + str(self.get_free_disk_space_absolute(prettier=True)))
             Log.write('Used disk space in percent: ' + str(self.get_free_disk_space()) + '% used')
             Log.write('CPU utilization: ' + str(self.get_cpu_percent()) + '%')
+            users = self.get_users()
+            for index, user in enumerate(users):
+                Log.write(f'Current users [{str(index)}]: {str(user[0])}')
+
+            Log.write('---------------------------------------')
+
             time.sleep(10)
 
     def get_cpu_count(self):
