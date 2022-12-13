@@ -6,8 +6,10 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./:/app
+      - ./:/project
     command: python app/main.py
+    environment:
+      PORT: '5000'
 
   db:
     environment:
