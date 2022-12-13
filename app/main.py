@@ -18,6 +18,5 @@ class Main:
                                     name='HardwareLogWriter').start()
 
 
-
 if __name__ == "__main__":
     Main()
