@@ -5,3 +5,10 @@ email = example2@example.com
 smtp = smtp.example.de
 email = example@example.com
 password = YourStrongPassword
+
+[dbconnection]
+host= your.db.host.de
+database= database
+user= username
+port= port
+password= password
