@@ -2,7 +2,7 @@ import mysql.connector as db
 import sys
 import configparser
 
-from app.log.log import Log
+from ..log.log import Log
 
 
 class DatabaseConnection:
