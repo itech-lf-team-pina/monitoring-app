@@ -1,7 +1,8 @@
 import os
 import time
 import psutil
-from app.log.log import Log
+from ..log.log import Log
+
 
 class HardwareMonitor:
     def write_periodic_logs(self):
