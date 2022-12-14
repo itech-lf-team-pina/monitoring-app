@@ -47,6 +47,8 @@ jobs:
 
     - name: Security vulnerabilities scan
       uses: aufdenpunkt/python-safety-check@master
+      with:
+        scan_requirements_file_only: 'true'
 
     - name: Test with pytest
       run: |
