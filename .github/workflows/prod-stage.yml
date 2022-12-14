@@ -8,6 +8,9 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  AZURE_WEBAPP_NAME: lf8-prod
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
 
 permissions:
   contents: read
@@ -30,14 +33,10 @@ jobs:
     - name: Install Dependencies
       run: |
         pip install -r requirements.txt
-    - name: PyInstaller Linux
-      uses: JackMcKew/pyinstaller-action-linux@0.1.4
-      with:
-        path: app
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
+    - name: Building web app
+      uses: azure/appservice-build@v2
       with:
-        name: monitoring
-        path: /dist/windows
-
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
