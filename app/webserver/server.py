@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask
-from ..log.log import Log
+from app.log.log import Log
 
 
 def create_app(test_config=None):
@@ -26,9 +26,13 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
-    from ..log import show_log
+    @app.route('/status')
+    def hello():
+        return 'up!'
+
+    from app.log.show_log import show_log
     app.register_blueprint(show_log.bp)
 
-    Log.write('server started')
+    Log.write('Server started')
 
     return app

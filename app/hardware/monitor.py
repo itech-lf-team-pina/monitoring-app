@@ -1,7 +1,7 @@
 import os
 import time
 import psutil
-from ..log.log import Log
+from app.log.log import Log
 
 
 class HardwareMonitor:
