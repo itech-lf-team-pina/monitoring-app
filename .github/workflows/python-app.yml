@@ -8,7 +8,8 @@ on:
     branches: [ "main", "test" ]
   workflow_dispatch:
 
-
+env:
+  DEP_PATH: requirements.txt
 
 permissions:
   contents: read
