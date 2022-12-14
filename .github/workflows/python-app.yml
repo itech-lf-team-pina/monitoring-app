@@ -44,9 +44,6 @@ jobs:
         pylint: true
         workdir: ./
 
-    - name: Prettify code
-      uses: creyD/prettier_action@v4.2
-
     - name: Security vulnerabilities scan
       uses: aufdenpunkt/python-safety-check@master
 
