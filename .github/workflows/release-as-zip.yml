@@ -34,6 +34,5 @@ jobs:
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-release-asset@v2
-        asset_name: monitoring
         with:
           name: python-app
