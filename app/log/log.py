@@ -1,5 +1,6 @@
 import time
 
+
 class Log:
     logfile = 'logs/application.log'
     t = time.localtime()

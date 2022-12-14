@@ -24,6 +24,22 @@ class HardwareMonitor:
 
             time.sleep(10)
 
+    def write_periodic_logs_in_db(self, db):
+        db.insert_hardware_data(1, self.get_cpu_count())
+        while True:
+            db.insert_hardware_data(3, self.get_ram()[1])
+            db.insert_hardware_data(4, self.get_ram()[2])
+            db.insert_hardware_data(5, self.get_ram()[3])
+            db.insert_hardware_data(6, self.get_free_disk_space_absolute())
+            db.insert_hardware_data(7, self.get_free_disk_space())
+            db.insert_hardware_data(2, self.get_cpu_percent())
+
+            users = self.get_users()
+            for index, user in enumerate(users):
+                db.insert_hardware_data(8, user[0])
+
+            time.sleep(10)
+
     def get_cpu_count(self):
 
         return psutil.cpu_count()

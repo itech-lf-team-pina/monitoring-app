@@ -27,10 +27,10 @@ def create_app(test_config=None):
         return 'Hello, World!'
 
     @app.route('/status')
-    def hello():
+    def status():
         return 'up!'
 
-    from app.log.show_log import show_log
+    from app.log import show_log
     app.register_blueprint(show_log.bp)
 
     Log.write('Server started')
