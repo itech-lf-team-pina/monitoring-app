@@ -1,0 +1,14 @@
+# syntax=docker/dockerfile:1
+
+FROM python:3.11
+
+WORKDIR /src
+
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+ENV PYTHONPATH=/src
+
+COPY . .
+
+CMD [ "python", "app/main.py"]
