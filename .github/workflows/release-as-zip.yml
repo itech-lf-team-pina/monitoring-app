@@ -36,3 +36,4 @@ jobs:
         uses: actions/upload-release-asset@v2
         with:
           name: python-app
+          asset_name: monitoring-app-${{ github.run_id }}.zip
