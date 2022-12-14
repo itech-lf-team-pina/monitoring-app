@@ -1,7 +1,7 @@
 from flask import (
     Blueprint
 )
-from app.log.log import Log
+from .log import Log
 
 bp = Blueprint('log', __name__, url_prefix='/log')
 
