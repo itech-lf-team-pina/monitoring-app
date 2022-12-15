@@ -51,5 +51,4 @@ jobs:
         scan_requirements_file_only: 'true'
 
     - name: Test with pytest
-      run: |
-        pytest
+      run: python -m pytest --import-mode=append tests/
