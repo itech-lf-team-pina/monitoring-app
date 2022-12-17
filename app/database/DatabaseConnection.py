@@ -55,6 +55,25 @@ class DatabaseConnection:
         except db.Error as e:
             Log.write(f'Error while inserting new thresholds: {e}')
 
+    def insert_warning_log(self, value, is_critical_hardware: bool = False, is_warning_hardware: bool = False, is_webserver: bool = False):
+        try:
+            if is_critical_hardware:
+                self._cursor.execute('INSERT INTO log (log, log_type) VALUES (%s, %s)',
+                                     (value, 1))
+                self._connection.commit()
+            elif is_warning_hardware:
+                self._cursor.execute('INSERT INTO log (log, log_type) VALUES (%s, %s)',
+                                     (value, 2))
+                self._connection.commit()
+            elif is_webserver:
+                self._cursor.execute('INSERT INTO log (log, log_type) VALUES (%s, %s)',
+                                     (value, 3))
+                self._connection.commit()
+            else:
+                db.Error(msg='No log type given')
+        except db.Error as e:
+            Log.write(f'Error while inserting new hardware data: {e}')
+
     def select_all_hardware(self):
         self._cursor.execute(
             "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id")
@@ -62,7 +81,7 @@ class DatabaseConnection:
         return records
 
     def select_all_thresholds(self):
-        query = "Select * from threshold h inner join hardware_type ht on h.hardware_type = " \
+        query = "Select h.id, h.value, h.timestamp, ht.name from threshold h inner join hardware_type ht on h.hardware_type = " \
                 "ht.id inner join limit_type lt on h.limit_type = lt.id"
 
         self._cursor.execute(query)
@@ -78,18 +97,20 @@ class DatabaseConnection:
         else:
             if threshold == 'ram':
                 threshold_name = 4
-            else:
+            elif threshold == 'cpu':
                 threshold_name = 2
+            else:
+                threshold_name = 0
 
             self._cursor.execute(
-                "Select * from threshold h inner join hardware_type ht on h.hardware_type = "
+                "Select  h.id, h.value, h.timestamp, ht.name from threshold h inner join hardware_type ht on h.hardware_type = "
                 "ht.id inner join limit_type lt on h.limit_type = lt.id WHERE hardware_type=%s AND limit_type=%s ORDER "
                 "BY timestamp ASC LIMIT 1", (threshold_name, 1))
             current_soft_limit = self._cursor.fetchall()
             self._cursor.execute(
-                "Select * from threshold h inner join hardware_type ht on h.hardware_type = "
+                "Select h.id, h.value, h.timestamp, ht.name from threshold h inner join hardware_type ht on h.hardware_type = "
                 "ht.id inner join limit_type lt on h.limit_type = lt.id WHERE hardware_type=%s AND limit_type=%s "
                 "ORDER BY timestamp DESC LIMIT 1", (threshold_name, 2))
             current_hard_limit = self._cursor.fetchall()
 
-            return current_soft_limit, current_hard_limit
+            return current_soft_limit[0], current_hard_limit[0]
