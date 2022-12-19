@@ -5,3 +5,4 @@ __pycache__/
 config.ini
 /dist/
 /build/
+/config_prod.ini
