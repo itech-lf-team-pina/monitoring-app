@@ -14,5 +14,6 @@ def start_alarm():
     alarm = Alarm(db=database, hardware=hardware, mail=mail)
 
     while True:
+        time.sleep(60)
         alarm.check_thresholds()
         time.sleep(60)

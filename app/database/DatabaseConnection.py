@@ -43,15 +43,12 @@ class DatabaseConnection:
         except db.Error as e:
             Log.write(f'Error while inserting new hardware data: {e}')
 
-    def insert_new_thresholds(self, hardware_type, threshold, limit_type):
+    def update_threshold(self, hardware_type, threshold, limit_type):
         try:
-            if hardware_type:
-                query = "INSERT INTO threshold (value, hardware_type, limit_type) VALUES (%s, %s, %s)"
-                values = (threshold, hardware_type, limit_type)
-                self._cursor.execute(query, values)
-                self._connection.commit()
-            else:
-                Log.write('Error while inserting. No hardware type given')
+            query = "UPDATE threshold SET value = %s, timestamp= CURRENT_TIMESTAMP() WHERE hardware_type = %s AND limit_type = %s"
+            values = (threshold, hardware_type, limit_type)
+            self._cursor.execute(query, values)
+            self._connection.commit()
         except db.Error as e:
             Log.write(f'Error while inserting new thresholds: {e}')
 
@@ -76,7 +73,13 @@ class DatabaseConnection:
 
     def select_all_hardware(self):
         self._cursor.execute(
-            "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id")
+            "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id WHERE value_string IS NULL AND h.timestamp >= NOW() - INTERVAL 1 HOUR ")
+        records = self._cursor.fetchall()
+        return records
+
+    def select_all_users(self):
+        self._cursor.execute(
+            "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id WHERE value_int IS NULL AND h.timestamp >= NOW() - INTERVAL 1 DAY")
         records = self._cursor.fetchall()
         return records
 
