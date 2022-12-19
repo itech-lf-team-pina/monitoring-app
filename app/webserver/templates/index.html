@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <link rel="stylesheet" href="../static/main.css">
+    <link rel="icon" href="../static/icon.ico">
+    <title>{{ data.labels.title }}</title>
+</head>
+
+<body>
+
+<div class="content">
+    {% for element in data.hardware %}
+        <div class="hardware-data">
+            <div class="hardware__content">
+            <div class="hardware__content-header">
+            <img class="header__icon" src="../static/{{ element.icon }}"/>
+             <div class="header__title">{{ element.title }}</div>
+            </div>
+            <table>
+                {% for data in element.data %}
+                 <tr>
+                 <td>{{ data.title }}</td>
+                 <td>{{ data.value }}</td>
+                 </tr>
+                {% endfor %}
+            </table>
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+
+</body>
+
+
+</html>
