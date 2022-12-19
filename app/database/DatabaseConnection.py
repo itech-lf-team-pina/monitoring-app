@@ -73,13 +73,13 @@ class DatabaseConnection:
 
     def select_all_hardware(self):
         self._cursor.execute(
-            "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id WHERE value_string IS NULL AND h.timestamp >= NOW() - INTERVAL 1 HOUR ")
+            "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id WHERE value_string IS NULL AND h.timestamp >= NOW() - INTERVAL 6 HOUR ")
         records = self._cursor.fetchall()
         return records
 
     def select_all_users(self):
         self._cursor.execute(
-            "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id WHERE value_int IS NULL AND h.timestamp >= NOW() - INTERVAL 1 DAY")
+            "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id WHERE value_int IS NULL AND h.timestamp >= NOW() - INTERVAL 6 HOUR ")
         records = self._cursor.fetchall()
         return records
 
