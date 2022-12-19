@@ -29,40 +29,43 @@ class Alarm:
         current_ram = self._hardware.get_ram()[2]
         current_cpu = self._hardware.get_cpu_percent()
 
-        print('CPU')
-        print(threshold_cpu_soft_percent, threshold_cpu_hard)
-        print('RAM')
-        print(threshold_ram_soft_percent, threshold_ram_hard)
-
-        threshold_cpu_soft_value = threshold_cpu_hard[1] * threshold_cpu_soft_percent[1]
-        threshold_ram_soft_value = threshold_ram_hard[1] * threshold_ram_soft_percent[1]
+        threshold_cpu_soft_value = threshold_cpu_hard[1] * threshold_cpu_soft_percent[1] / 100
+        threshold_ram_soft_value = threshold_ram_hard[1] * threshold_ram_soft_percent[1] / 100
 
         # only important for render.com Logging
         print('Alarm class check started')
-        print(current_cpu)
-        print(current_ram)
+        print(f'Current CPU: {current_cpu} \n'
+              f'Soft limit: {threshold_cpu_soft_value} ({threshold_cpu_soft_percent[1]}%) \n'
+              f'Hard limit: {threshold_cpu_hard[1]}'
+              )
+        print(f'Current RAM: {current_ram} \n'
+              f'Soft limit: {threshold_ram_soft_value} ({threshold_ram_soft_percent[1]}%) \n'
+              f'Hard limit: {threshold_ram_hard[1]}'
+              )
 
         # check cpu
         if current_cpu > threshold_cpu_soft_value:
-            if current_cpu >= threshold_cpu_hard:
-                log_message = f'Current CPU utilization reached your hard limit! \n Current value: {str(current_cpu)}'
+            if current_cpu >= threshold_cpu_hard[1]:
+                log_message = f'Current CPU utilization reached your hard limit ({current_cpu}/{threshold_cpu_hard[1]})!'
+                print('triggering mail')
                 self.trigger_mail(
                     message=log_message)
                 self._db.insert_warning_log(value=log_message, is_critical_hardware=True)
             else:
-                log_message = f'Current CPU utilization reached your soft limit! \n Current value: {str(current_cpu)}'
+                print('soft warning triggered')
+                log_message = f'Current CPU utilization reached your soft limit ({current_cpu}/{threshold_cpu_soft_value})!'
                 Log.write(log_message)
                 self._db.insert_warning_log(value=log_message, is_warning_hardware=True)
 
         # check ram
         if current_ram > threshold_ram_soft_value:
-            if current_ram >= threshold_ram_hard:
-                log_message = f'Current used RAM reached your hard limit! \n Current value: {str(current_cpu)}'
+            if current_ram >= threshold_ram_hard[1]:
+                log_message = f'Current used RAM reached your hard limit ({current_ram}/{threshold_ram_hard[1]})!'
                 self.trigger_mail(
-                    message=log_message)
+                    message='\n' + log_message)
                 self._db.insert_warning_log(value=log_message, is_critical_hardware=True)
             else:
-                log_message = f'Current used RAM reached your soft limit! \n Current value: {str(current_cpu)}'
+                log_message = f'Current used RAM reached your soft limit ({current_ram}/{threshold_ram_soft_value})!'
                 Log.write(log_message)
                 self._db.insert_warning_log(value=log_message, is_warning_hardware=True)
 
