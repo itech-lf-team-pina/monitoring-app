@@ -10,6 +10,9 @@ services:
     command: python app/main.py
     environment:
       PORT: '5000'
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
     environment:
@@ -22,6 +25,11 @@ services:
       - "3306:3306"
     volumes:
       - database:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uapp", "-papp" ]
+      interval: 1s
+      timeout: 1s
+      retries: 10
 
 volumes:
   database:
