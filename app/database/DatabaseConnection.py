@@ -22,14 +22,29 @@ class DatabaseConnection:
             )
             Log.write('Connected to database')
             print('Connected to database')
-            self._cursor = self._connection.cursor()
+            self._cursor = self._connection.cursor(buffered=True)
         except db.Error as e:
             Log.write(f'Error connecting to MariaDB server: {e}')
             sys.exit(1)
 
+    def check_connection(self):
+        try:
+            self._cursor.close()
+            self._connection.close()
+            self._connection = db.connect(
+                host=self.config['dbconnection']['host'],
+                database=self.config['dbconnection']['database'],
+                user=self.config['dbconnection']['user'],
+                port=self.config['dbconnection']['port'],
+                password=self.config['dbconnection']['password']
+            )
+            self._cursor = self._connection.cursor(buffered=True)
+        except db.Error as e:
+            Log.write(f'Error connecting to MariaDB server: {e}')
+
     def insert_hardware_data(self, hardware_type, value):
         try:
-
+            self.check_connection()
             if hardware_type == 8:
                 self._cursor.execute('INSERT INTO hardware (value_string, hardware_type) VALUES (%s, %s)',
                                      (value, hardware_type))
@@ -44,6 +59,7 @@ class DatabaseConnection:
             Log.write(f'Error while inserting new hardware data: {e}')
 
     def update_threshold(self, hardware_type, threshold, limit_type):
+        self.check_connection()
         try:
             query = "UPDATE threshold SET value = %s, timestamp= CURRENT_TIMESTAMP() WHERE hardware_type = %s AND limit_type = %s"
             values = (threshold, hardware_type, limit_type)
@@ -52,8 +68,10 @@ class DatabaseConnection:
         except db.Error as e:
             Log.write(f'Error while inserting new thresholds: {e}')
 
-    def insert_warning_log(self, value, is_critical_hardware: bool = False, is_warning_hardware: bool = False, is_webserver: bool = False):
+    def insert_warning_log(self, value, is_critical_hardware: bool = False, is_warning_hardware: bool = False,
+                           is_webserver: bool = False):
         try:
+            self.check_connection()
             if is_critical_hardware:
                 self._cursor.execute('INSERT INTO log (log, log_type) VALUES (%s, %s)',
                                      (value, 1))
@@ -72,18 +90,21 @@ class DatabaseConnection:
             Log.write(f'Error while inserting new hardware data: {e}')
 
     def select_all_hardware(self):
+        self.check_connection()
         self._cursor.execute(
             "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id WHERE value_string IS NULL AND h.timestamp >= NOW() - INTERVAL 6 HOUR ")
         records = self._cursor.fetchall()
         return records
 
     def select_all_users(self):
+        self.check_connection()
         self._cursor.execute(
             "Select * from hardware h inner join hardware_type ht on h.hardware_type = ht.id WHERE value_int IS NULL AND h.timestamp >= NOW() - INTERVAL 6 HOUR ")
         records = self._cursor.fetchall()
         return records
 
     def select_all_thresholds(self):
+        self.check_connection()
         query = "Select h.id, h.value, h.timestamp, ht.name from threshold h inner join hardware_type ht on h.hardware_type = " \
                 "ht.id inner join limit_type lt on h.limit_type = lt.id"
 
@@ -94,6 +115,7 @@ class DatabaseConnection:
         return records
 
     def select_current_threshold(self, threshold):
+        self.check_connection()
         if threshold is None:
             Log.write('Error: no threshold given')
             return 0, 0
