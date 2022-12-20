@@ -111,8 +111,6 @@ def create_app(test_config=None):
 
     @app.route('/limits')
     def limits_route():
-        print(str(request.form))
-        print(request.method)
 
         cpu_limits = database.select_current_threshold(threshold='cpu')
         ram_limits = database.select_current_threshold(threshold='ram')
@@ -142,7 +140,6 @@ def create_app(test_config=None):
     @app.route('/update-limit', methods=['POST'])
     def update_limits_route():
         print('Updating limits')
-        print(str(request.form))
         if request.form.get('cpu_soft_limit'):
             database.update_threshold(
                 threshold=request.form.get('cpu_soft_limit'),
